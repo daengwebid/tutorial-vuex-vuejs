@@ -5,9 +5,19 @@
                 <h3 class="card-title">List Agenda</h3>
             </div>
             <div class="card-body">
-                <ul>
-                    <li v-for="row in listAgenda" :key="row"><strong>{{ row.hari }}</strong>: {{ row.kegiatan }}</li>
-                </ul>
+                <div class="form-group">
+                    <label for="">Hari</label>
+                    <input type="text" v-model="agenda.hari" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="">Kegiatan</label>
+                    <input type="text" v-model="agenda.kegiatan" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-danger btn-sm"
+                        :disabled="isLoading"
+                        @click.prevent="simpan">{{ isLoading ? 'Loading...':'Tambahkan' }}</button>
+                </div>
             </div>
         </div>
     </div>
@@ -15,9 +25,26 @@
 <script>
     export default {
         name: 'AgendaInput',
+        data() {
+            return {
+                agenda: {
+                    hari: '',
+                    kegiatan: ''
+                }
+            }
+        },
         computed: {
-            listAgenda() {
-                return this.$store.state.listAgenda
+            isLoading() {
+                return this.$store.state.isLoading
+            }
+        },
+        methods: {
+            simpan() {
+                this.$store.dispatch('simpanAgenda', this.agenda)
+                this.agenda = {
+                    hari: '',
+                    kegiatan: ''
+                }
             }
         }
     }
